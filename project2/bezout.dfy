@@ -1,0 +1,40 @@
+// OPTIONAL: indicate additional arguments provided to dafny for verification here
+
+// DO NOT MODIFY THE IMPLEMENTATION OR THE METHOD SIGNATURE
+method bezout(a: int, b: int) returns (g: int, x: int, y: int)
+    requires a >= 0
+    requires b >= 0
+    ensures g >= 0
+    ensures a * x + b * y == g
+{
+    if a == 0 {
+        return b, 0, 1;
+    }
+    if b == 0 {
+        return a, 1, 0;
+    }
+
+    var x0, x1 := 1, 0;
+    var y0, y1 := 0, 1;
+    var a', b' := a, b;
+
+    while b' != a' // TODO: add invariant(s) and decreasing term
+    {
+        var q: int := 0;
+        var r: int := a';
+
+        while r > b' // TODO: add invariant(s) and decreasing term
+        {
+            r := r - b';
+            q := q + 1;
+        }
+
+        a', b' := b', r;
+        x0, x1 := x1, x0 - q * x1;
+        y0, y1 := y1, y0 - q * y1;
+    }
+
+    g := a';
+    x := x0;
+    y := y0;
+}
